@@ -1,0 +1,13 @@
+1, Gemmini driver installation
+
+    $ cd driver
+    $ autoconf -i
+    $ ./configure --prefix=/media/share/gem5-accel/gemmini-software/install/driver
+    $ make install
+
+2, Gemmini runtimer installation
+
+    $ cd runtime
+    $ autoconf -i
+    $ ./configure --prefix=/media/share/gem5-accel/gemmini-software/install/runtime --with-gemmini_driver=/media/share/gem5-accel/gemmini-software/install/driver
+    $ make install

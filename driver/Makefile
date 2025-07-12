@@ -1,0 +1,45 @@
+srcdir := .
+builddir := .
+INSTALL_DIR := /media/share/gem5-accel/gemmini-software/install/driver
+
+GEMMIMI_DRIVER_LIB := libgemmini-driver
+
+SRC_DIR := $(srcdir)/src
+BUILD_DIR := $(builddir)/build
+
+SRCS := $(shell find $(SRC_DIR) -name '*.cpp')
+
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+
+DEPS := $(OBJS:.o=.d)
+
+INC_DIRS := $(shell find $(SRC_DIR) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+
+CPPFLAGS := $(INC_FLAGS) -MMD -MP
+
+AR=ar
+
+$(BUILD_DIR)/$(GEMMIMI_DRIVER_LIB): $(OBJS)
+	$(CXX) $(OBJS) -shared -o $@.so $(LDFLAGS)
+	$(AR) crs $@.a $(OBJS) 
+
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+all: install
+
+.PHONY: install
+install: $(BUILD_DIR)/$(GEMMIMI_DRIVER_LIB)
+	install -d -m 0755 $(INSTALL_DIR)/lib
+	install -d -m 0755 $(INSTALL_DIR)/include
+	install -m 0755 $(BUILD_DIR)/libgemmini-driver.so $(INSTALL_DIR)/lib
+	install -m 0644 $(BUILD_DIR)/libgemmini-driver.a $(INSTALL_DIR)/lib
+	install -m 0644 $(SRC_DIR)/gemmini_driver.h $(INSTALL_DIR)/include
+
+.PHONY: clean
+clean:
+	rm -r $(BUILD_DIR)
+
+-include $(DEPS)

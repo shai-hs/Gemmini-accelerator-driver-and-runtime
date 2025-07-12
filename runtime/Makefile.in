@@ -1,0 +1,49 @@
+srcdir := @top_srcdir@
+builddir := @top_builddir@
+INSTALL_DIR := @prefix@
+GEMMINI_DRV_DIR := @with_gemmini_driver@
+
+GEMMIMI_RT_LIB := libgemmini-runtime
+
+SRC_DIR := $(srcdir)/src
+BUILD_DIR := $(builddir)/build
+
+SRCS := $(shell find $(SRC_DIR) -name '*.cpp')
+
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+
+DEPS := $(OBJS:.o=.d)
+
+INC_DIRS := $(shell find $(SRC_DIR) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS)) $(addprefix -I,$(GEMMINI_DRV_DIR)/include)
+
+LIBS := $(addprefix -L,$(GEMMINI_DRV_DIR)/lib)
+
+CPPFLAGS := $(INC_FLAGS) -MMD -MP
+LDFLAGS := $(LIBS) -lgemmini-driver
+
+AR := ar
+
+$(BUILD_DIR)/$(GEMMIMI_RT_LIB): $(OBJS)
+	$(CXX) $(OBJS) -shared -o $@.so $(LDFLAGS)
+	$(AR) crs $@.a $(OBJS)
+
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+all: install
+
+.PHONY: install
+install: $(BUILD_DIR)/$(GEMMIMI_RT_LIB)
+	install -d -m 0755 $(INSTALL_DIR)/lib
+	install -d -m 0755 $(INSTALL_DIR)/include
+	install -m 0755 $(BUILD_DIR)/libgemmini-runtime.so $(INSTALL_DIR)/lib
+	install -m 0644 $(BUILD_DIR)/libgemmini-runtime.a $(INSTALL_DIR)/lib
+	install -m 0644 $(SRC_DIR)/gemmini_runtime.h $(INSTALL_DIR)/include
+
+.PHONY: clean
+clean:
+	rm -r $(BUILD_DIR)
+
+-include $(DEPS)
