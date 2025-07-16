@@ -2,7 +2,7 @@
 
     $ cd driver
     $ autoconf -i
-    $ ./configure --prefix=/media/share/gem5-accel/gemmini-software/install/driver
+    $ ./configure --prefix=/media/share/gem5-accel/gemmini-software/install
     $ make install
 
 2, Gemmini runtimer installation

@@ -36,11 +36,11 @@ all: install
 
 .PHONY: install
 install: $(BUILD_DIR)/$(GEMMIMI_RT_LIB)
-	install -d -m 0755 $(INSTALL_DIR)/lib
-	install -d -m 0755 $(INSTALL_DIR)/include
-	install -m 0755 $(BUILD_DIR)/libgemmini-runtime.so $(INSTALL_DIR)/lib
-	install -m 0644 $(BUILD_DIR)/libgemmini-runtime.a $(INSTALL_DIR)/lib
-	install -m 0644 $(SRC_DIR)/gemmini_runtime.h $(INSTALL_DIR)/include
+	install -d -m 0755 $(INSTALL_DIR)/runtime/lib
+	install -d -m 0755 $(INSTALL_DIR)/runtime/include
+	install -m 0755 $(BUILD_DIR)/libgemmini-runtime.so $(INSTALL_DIR)/runtime/lib
+	install -m 0644 $(BUILD_DIR)/libgemmini-runtime.a $(INSTALL_DIR)/runtime/lib
+	install -m 0644 $(SRC_DIR)/gemmini_runtime.h $(INSTALL_DIR)/runtime/include
 
 .PHONY: clean
 clean:

@@ -32,11 +32,11 @@ all: install
 
 .PHONY: install
 install: $(BUILD_DIR)/$(GEMMIMI_DRIVER_LIB)
-	install -d -m 0755 $(INSTALL_DIR)/lib
-	install -d -m 0755 $(INSTALL_DIR)/include
-	install -m 0755 $(BUILD_DIR)/libgemmini-driver.so $(INSTALL_DIR)/lib
-	install -m 0644 $(BUILD_DIR)/libgemmini-driver.a $(INSTALL_DIR)/lib
-	install -m 0644 $(SRC_DIR)/gemmini_driver.h $(INSTALL_DIR)/include
+	install -d -m 0755 $(INSTALL_DIR)/driver/lib
+	install -d -m 0755 $(INSTALL_DIR)/driver/include
+	install -m 0755 $(BUILD_DIR)/libgemmini-driver.so $(INSTALL_DIR)/driver/lib
+	install -m 0644 $(BUILD_DIR)/libgemmini-driver.a $(INSTALL_DIR)/driver/lib
+	install -m 0644 $(SRC_DIR)/gemmini_driver.h $(INSTALL_DIR)/driver/include
 
 .PHONY: clean
 clean:
